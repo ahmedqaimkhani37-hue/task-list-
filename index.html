@@ -1,1 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: gray;
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+        }
+        h2{
+            color: blue;
+            text-transform: uppercase;
+        }
+        .todo-list {
+            background: white;
+            box-shadow: 3px 3px 3px black;
+            border-radius: 20px;
+            padding: 20px;
+            width: 350px;
+            
+        }
+        .input-field input {
+            padding: 10px;
+            background-color: rgba(128, 128, 128, 0.522);
+            border-radius: 20px;
+            width: 280px;
+            
+            border: 0;
+            padding-right: 70px;
+            box-sizing: border-box;
+        }
+        .input-field input:focus {
+            border: 0;
+            outline: none;
+        }
+        .input-field {
+            position: fixed;
+        }
+        .input-field button {
+            position: absolute;
+            right: 70px;
+            border-radius: 20px;
+            font-size: 15px;
+            padding: 8px 18px 10px 20px;
+            background-color: orangered;
+            border: 0;
+        }
+        .item-list ul {
+            gap: 8px;
+            overflow: scroll;
+        }
+        .item-list ul li {
+            list-style: none;
+            margin-bottom: 10px;
+            position: relative;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            padding-left: 10px;
+            padding-right: 30px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        ul li::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-image: url(./uncheck.png);
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            top: 2px;
+            filter: brightness(100%);
+            left: -30px;
+        }
+        ul li.checked::before {
+            background-image: url(./check.png);
+        }
+        .checked {
+            text-decoration: line-through;
+            color: grey;
+        }
+        span {
+            position: absolute;
+            right: 0;
+            padding: 3px 5px;
+            top: -8px;
+            font-size: 30px;
+            border-radius: 50%;
+        }
+        span:hover {
+            background-color: rgba(128, 128, 128, 0.39);
+        }
+    </style>
+</head>
+<body>
+    <div class="todo-list">
+        <div class="heading">
+            <h2>TO-DO List</h2>
+        </div>
+        <div class="input-field">
+            <input type="text" class='input' id='input'placeholder='Write Your Task Here'>
+            <button class="btn" onclick='addtask()'>Add</button>
+        </div>
+        <div class="item-list">
+            <ul class="List" id="list">
+            </ul>
+        </div>
+    </div>
+    <script>
+        const inputbox = document.getElementById('input');
+        const list = document.getElementById('list');
+        inputbox.addEventListener('keydown',function (e) {
+            if (e.key === 'Enter') {
+                addtask()
+            }
+            
+        })
+        function addtask() {
+            if (inputbox.value === '') {
+                alert('Enetr your task');
+            } else {
+                let li = document.createElement('li');
+                li.innerHTML = inputbox.value;
+                list.appendChild(li);
+                let span = document.createElement('span');
+                span.innerHTML = '\u00d7';
+                li.appendChild(span);
+                inputbox.value = '';
+                 saveData();
+            }
+        }
+        list.addEventListener('click', function (e) {
+            if (e.target.tagName === 'LI') {
+                e.target.classList.toggle('checked');
+                 saveData();
+            }
+            else if (e.target.tagName === 'SPAN') {
+                e.target.parentElement.remove();
+                 saveData();
+            }
+        })
+        function saveData() {
+            localStorage.setItem('data' , list.innerHTML)
+        }
+        function showTask() {
+            list.innerHTML = localStorage.getItem('data')
+        }
+        showTask()
+    </script>
+</body>
 
+</html>
